@@ -120,10 +120,10 @@ template<typename T> ImageProxy(T &img) -> ImageProxy<typename T::PixelFormat>;
 namespace stipje::image_format {
 
     constexpr auto ptorgba = [] (pixel_t p) constexpr {
-        return std::make_tuple((p >> 24) & 0xff,
-                               (p >> 16) & 0xff,
-                               (p >>  8) & 0xff,
-                               p & 0xff);
+        return std::tuple((p >> 24) & 0xff,
+                          (p >> 16) & 0xff,
+                          (p >>  8) & 0xff,
+                          p & 0xff);
     };
 
     // PAM format: http://netpbm.sourceforge.net/doc/pam.html
