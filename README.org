@@ -36,5 +36,8 @@ int main() {
 #+END_SRC
 
 : g++ -Impl/src/kvasir -std=c++2a -Os -o example example.cc
+: ./example
+
+[[./example.png]]
 
 More docs to be written later :-)
