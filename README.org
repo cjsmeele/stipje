@@ -1,6 +1,13 @@
 #+TITLE: Stipje, like XPM images, but C++-style
 #+AUTHOR: Chris Smeele
 
+Stipje reads XPM-style image strings and converts them to 32-bit pixel buffers
+at compile-time.
+
+Several image formats are included as well, to (at runtime) output images in
+PNM, PAM or true-color console block drawing characters. Other formatters can
+be trivially added.
+
 ** Synopsis
 
 Requirements:
