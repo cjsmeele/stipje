@@ -1,0 +1,40 @@
+#+TITLE: Stipje, like XPM images, but C++-style
+#+AUTHOR: Chris Smeele
+
+** Synopsis
+
+Requirements:
+
+- GCC 8 for experimental c++2a support
+- Kvasir MPL for metaprogramming assistance
+
+#+BEGIN_SRC C++
+#include "stipje.hh"
+#include <iostream>
+
+int main() {
+    constexpr auto example =
+    "                                                 "
+    " ooooooo                                         "
+    " o     o   ####  ##### # #####       # ######    "
+    " o  #  o  #        #   # #    #      # #         "
+    " o   # o   ####    #   # #    #      # #####     "
+    " o ### o       #   #   # #####       # #         "
+    " o     o  #    #   #   # #      #    # #         "
+    " ooooooo   ####    #   # #       ####  ######  o "
+    "                                                 "_stipje
+    ("  00000000" // rgba
+     "o ff0000ff"
+     "# ffffffff"_stipje_palette,
+     uint_<49> {}, // width
+     uint_< 9> {}, // height
+     stipje::pixel_format::rgba{});
+    stipje::format(std::cout, example, stipje::image_format::console256_squared{});
+
+    return 0;
+}
+#+END_SRC
+
+: g++ -Impl/src/kvasir -std=c++2a -Os -o example example.cc
+
+More docs to be written later :-)
