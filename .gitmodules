@@ -1,3 +1,6 @@
 [submodule "mpl"]
 	path = mpl
 	url = https://github.com/kvasir-io/mpl.git
+[submodule "draken"]
+	path = draken
+	url = https://github.com/cjsmeele/draken.git

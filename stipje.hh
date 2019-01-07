@@ -29,11 +29,9 @@
 #include <cstdint>
 #include <algorithm>
 #include <tuple>
-#include <mpl/mpl.hpp>
+#include <draken/draken.hh>
 
 using pixel_t = uint32_t;
-
-using namespace kvasir::mpl;
 
 template<typename T, T V> struct value_ { static constexpr T value = V; };
 
@@ -317,7 +315,7 @@ namespace impl {
              typename H7, typename H6, typename H5, typename H4,
              typename H3, typename H2, typename H1, typename H0,
              typename... Rest>
-    struct do_extract_palette<list<Ms...>,
+    struct do_extract_palette<tt::list<Ms...>,
                               Ch, ChDiscard,
                               H7, H6, H5, H4,
                               H3, H2, H1, H0,
@@ -326,7 +324,9 @@ namespace impl {
         // Take a single palette color text (e.g. "# ffddaaff") and turn it into an key/value pair (as a mpl list).
 
         using type = typename
-              do_extract_palette<list<Ms..., list<Ch, uint_<hex_to_abgr(H7::value,
+              do_extract_palette<tt::list<Ms...,
+                                          tt::list<Ch,
+                                                   tt::uint<hex_to_abgr(H7::value,
                                                                         H6::value,
                                                                         H5::value,
                                                                         H4::value,
@@ -338,13 +338,13 @@ namespace impl {
     };
 
     template<typename... Ms>
-    struct do_extract_palette<list<Ms...>> {
-        using type = list<Ms...>;
+    struct do_extract_palette<tt::list<Ms...>> {
+        using type = tt::list<Ms...>;
     };
 }
 
 template<typename... Rest>
-using extract_palette = impl::do_extract_palette<list<>, Rest...>;
+using extract_palette = impl::do_extract_palette<tt::list<>, Rest...>;
 
 template<typename T, T... Cs>
 constexpr auto operator ""_stipje_palette() {
@@ -358,10 +358,13 @@ constexpr auto operator ""_stipje_palette() {
 // Get the value corresponding to a key in a kvlist.
 // Kvs... is: list<K,V>...
 template<typename K, typename... Kvs>
-using assoc_get = call<find_if<unpack<at0<same_as<K>>>,
-                               at0<unpack<at1<>>>,
-                               always<void>>,
-                       Kvs...>;
+using assoc_get_ = tt::run<tt::filter<tt::unlist<tt::head<tt::is<K>>>,
+                                  tt::if_<tt::empty<>,
+                                          tt::const_<void>,
+                                          tt::head<tt::unlist<tt::nth<tt::uint<1>>>>>>,
+                        Kvs...>;
+template<typename C = tt::return_one>
+using assoc_get = tt::lift_rigid<assoc_get_, C>;
 
 template<typename T, T... Cs>
 constexpr auto operator ""_stipje() {
@@ -390,7 +393,7 @@ constexpr auto operator ""_stipje() {
 
         // In one go, transform the list of characters to a pixel buffer, with
         // the given pixel format and palette.
-        return Image { Fmt::format(call<unpack<push_front<value_<T, Cs>, cfe<assoc_get>>>,
+        return Image { Fmt::format(tt::run<tt::unlist<tt::prepend<value_<T, Cs>, assoc_get<>>>,
                                         typename PT::Palette>::value)... };
     };
 }

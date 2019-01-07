@@ -13,7 +13,12 @@ be trivially added.
 Requirements:
 
 - GCC 8 for experimental c++2a support
-- Kvasir MPL for metaprogramming assistance
+- Draken for metaprogramming assistance
+
+*NOTE*: This branch, which uses Draken instead of Kvasir MPL, may OOM gcc
+during compilation when using large pictures (the lena example is commented out
+for this reason). Besides that, this version is functionally identical to the
+Kvasir MPL version on the master branch.
 
 #+BEGIN_SRC C++
 #include "stipje.hh"
@@ -42,7 +47,7 @@ int main() {
 }
 #+END_SRC
 
-: g++ -Impl/src/kvasir -std=c++2a -Os -o example example.cc
+: g++ -I. -std=c++2a -Os -o example example.cc
 : ./example
 
 [[./example.png]]

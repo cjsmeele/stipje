@@ -1,5 +1,5 @@
 example: example.cc stipje.hh
-	$(CXX) -Impl/src/kvasir -Wall -Wextra -std=c++2a -Wno-trigraphs -Os -o $@ $<
+	$(CXX) -I. -Wall -Wextra -std=c++2a -Wno-trigraphs -O1 -o $@ $<
 
 .PHONY: clean
 
